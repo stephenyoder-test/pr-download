@@ -22,6 +22,11 @@ class MyTestCase(unittest.TestCase):
             print(pr)
         self.assertEqual(len(prs), 3)
 
+        prs = download_pr.list_user_prs_in_org_repos("stephenyoder", "stephenyoder-test", MyTestCase.token)
+        for pr in prs:
+            print(pr)
+        self.assertEqual(len(prs), 1)
+
     def test_download_all_pull_requests(self):
         download_pr.download_all_pull_requests("vitahlin", "valkey-io", MyTestCase.token)
 
