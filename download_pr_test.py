@@ -16,14 +16,21 @@ def get_token(filename: str):
 class MyTestCase(unittest.TestCase):
 
     token = get_token("stephenyoder_token.txt")
+
     def test_list_user_prs_in_org_repos(self):
         prs = download_pr.list_user_prs_in_org_repos("vitahlin", "valkey-io", MyTestCase.token)
         for pr in prs:
             print(pr)
-        self.assertEqual(len(prs), 3)
+        self.assertEqual(3, len(prs))
+
+        prs = download_pr.list_user_prs_in_org_repos("stephenyoder", "stephenyoder-test", MyTestCase.token)
+        for pr in prs:
+            print(pr)
+        self.assertEqual(1, len(prs))
 
     def test_download_all_pull_requests(self):
         download_pr.download_all_pull_requests("vitahlin", "valkey-io", MyTestCase.token)
+        download_pr.download_all_pull_requests("stephenyoder", "stephenyoder-test", MyTestCase.token)
 
     def test_read_file_to_list(self):
         pr_names = download_pr.read_file_to_list("StephenPRs.txt")
