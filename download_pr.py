@@ -69,7 +69,7 @@ def download_pull_request_diff(token, org, repo, pr_number, output_file):
          with Contents and Pull Requests read access. {response.status_code} - {response.text}')
 
 
-def download_pull_request(org, access_token, repo_name, pr_number, username):
+def download_pull_request(org, access_token, repo_name, pr_number):
     filename = "pull_request_" + repo_name + "_" + str(pr_number) + "_diff.txt"
     # GitHub API endpoint for PR diff
     url = f'https://api.github.com/repos/{org}/{repo_name}/pulls/{pr_number}'
@@ -91,7 +91,7 @@ def download_pull_request(org, access_token, repo_name, pr_number, username):
 def download_all_pull_requests(username: str, organization: str, access_token: str):
     prs = list_user_prs_in_org_repos(username, organization, access_token)
     for pr in prs:
-        download_pull_request(organization, access_token, pr['repo_name'], pr['pr_number'], username)
+        download_pull_request(organization, access_token, pr['repo_name'], pr['pr_number'])
 
 
 if __name__ == "__main__":
