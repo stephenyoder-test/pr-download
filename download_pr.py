@@ -146,9 +146,9 @@ if __name__ == "__main__":
         sys.exit(1)
 
     username, organization, access_token = sys.argv[1:4]
-    MAX_THREADS = int(sys.argv[4]) if len(sys.argv) == 5 else 1
+    MAX_THREADS = int(sys.argv[4]) if len(sys.argv) >= 5 else 1
     print("starting program with", MAX_THREADS, "threads")
-    repos = read_file_to_list(sys.argv[5]) if len(sys.argv) == 6 else []
+    repos = read_file_to_list(sys.argv[5]) if len(sys.argv) >= 6 else []
     print("repos:", repos)
 
     download_all_pull_requests(username, organization, access_token, MAX_THREADS, repos)
