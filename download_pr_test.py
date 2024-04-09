@@ -24,7 +24,7 @@ class MyTestCase(unittest.TestCase):
         prs = download_pr.list_user_prs_in_org_repos("vitahlin", "valkey-io", MyTestCase.token,5)
         for pr in prs:
             print(pr)
-        self.assertEqual(len(prs), 7)
+        self.assertEqual(len(prs), 9)
 
         prs = download_pr.list_user_prs_in_org_repos("stephenyoder", "stephenyoder-test", MyTestCase.token, 3)
         for pr in prs:
@@ -32,7 +32,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(len(prs), 2)
 
     def test_download_all_pull_requests(self):
-        download_pr.download_all_pull_requests("vitahlin", "valkey-io", MyTestCase.token)
+        download_pr.download_all_pull_requests("vitahlin", "valkey-io", MyTestCase.token, 1, [])
 
     def test_read_file_to_list(self):
         pr_names = download_pr.read_file_to_list("StephenPRs.txt")

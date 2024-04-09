@@ -23,7 +23,7 @@ def read_file_to_list(file_path):
     return lines_list
 
 
-def list_user_prs_in_org_repos(username, organization_name, access_token, MAX_THREADS: int, repos: list = None):
+def list_user_prs_in_org_repos(username, organization_name, access_token, MAX_THREADS: int, repos: list = []):
     # Initialize the GitHub API client
     g = Github(access_token)
 
@@ -31,7 +31,11 @@ def list_user_prs_in_org_repos(username, organization_name, access_token, MAX_TH
     org = g.get_organization(organization_name)
 
     # Get all repositories in the organization
-    org_repos = org.get_repos() if repos is None else repos
+    org_repos = []
+    if repos != []:
+        org_repos = [org.get_repo(repo) for repo in repos]
+    else:
+        org_repos = org.get_repos()
 
     # List to store PRs created by the user
     user_prs = []
@@ -107,8 +111,8 @@ def download_pull_request(org, access_token, repo_name, pr_number):
     print('Pull request diff saved')
 
 
-def download_all_pull_requests(username: str, organization: str, access_token: str, MAX_THREADS: int = 5):
-    prs = list_user_prs_in_org_repos(username, organization, access_token, MAX_THREADS)
+def download_all_pull_requests(username: str, organization: str, access_token: str, MAX_THREADS: int, repos: list):
+    prs = list_user_prs_in_org_repos(username, organization, access_token, MAX_THREADS, repos)
 
     # Initialize the semaphore to control thread count
     # semaphore = threading.Semaphore(MAX_THREADS)
@@ -138,10 +142,13 @@ def download_all_pull_requests(username: str, organization: str, access_token: s
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
-        print("Usage: python download_pr.py username org access_token max_threads")
+        print("Usage: python download_pr.py username org access_token max_threads filepath")
         sys.exit(1)
 
     username, organization, access_token = sys.argv[1:4]
     MAX_THREADS = int(sys.argv[4]) if len(sys.argv) == 5 else 1
     print("starting program with", MAX_THREADS, "threads")
-    download_all_pull_requests(username, organization, access_token, MAX_THREADS)
+    repos = read_file_to_list(sys.argv[5]) if len(sys.argv) == 6 else []
+    print("repos:", repos)
+
+    download_all_pull_requests(username, organization, access_token, MAX_THREADS, repos)
